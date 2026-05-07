@@ -1,0 +1,73 @@
+{
+  "experiment_id": "exp1",
+  "description": "Three-case large-scale sampled-MC experiment. This metadata records the submitted evaluation parameters only; case-construction details are intentionally omitted from the anonymous release.",
+  "model": {
+    "num_arms": 100,
+    "num_states": 8,
+    "budget": 1,
+    "horizon": 150,
+    "discount": 0.99,
+    "episodes": 2000,
+    "cases": [
+      "case1",
+      "case2",
+      "case3"
+    ]
+  },
+  "policies": {
+    "our_index": {
+      "class": "OurHybridTailIndexPolicy",
+      "tail": "full_tail",
+      "tail_mode": "commitment_envelope",
+      "resource_price": 0.0,
+      "candidate_set": "all_arms",
+      "cache_precision": 7
+    },
+    "rollout_myopic": {
+      "class": "RolloutMyopicMultiStatePolicy",
+      "base_policy": "myopic",
+      "rollout_depth": 4,
+      "mc_samples": 1000
+    },
+    "myopic": {
+      "class": "MyopicMultiStatePolicy"
+    }
+  },
+  "csv_outputs": {
+    "case1": "csv/case1_average_mc_path.csv",
+    "case2": "csv/case2_average_mc_path.csv",
+    "case3": "csv/case3_average_mc_path.csv"
+  },
+  "matrix_data": {
+    "case1": "json/case1_100arm_matrices.json",
+    "case2": "json/case2_100arm_matrices.json",
+    "case3": "json/case3_100arm_matrices.json"
+  },
+  "raw_mc_outputs": {
+    "metrics": "json/metrics.json",
+    "traces": "json/traces.json"
+  },
+  "code": {
+    "main_script": "code/scripts/run_tuned_shared_mc_cases.py",
+    "csv_export_script": "code/scripts/export_average_mc_paths.py",
+    "package_source": "code/src/canonical_rmab"
+  },
+  "reproduction_commands": [
+    "cd exp1/code && MPLCONFIGDIR=/tmp/mplcache PYTHONPATH=src python3 scripts/run_tuned_shared_mc_cases.py --num-arms 100 --num-states 8 --budget 1 --horizon 150 --episodes 2000 --discount 0.99 --output-dir ../outputs/exp1",
+    "MPLCONFIGDIR=/tmp/mplcache python3 exp1/code/scripts/export_average_mc_paths.py --input-dir exp1/outputs/exp1 --csv-dir exp1/csv --figure-dir exp1/figures"
+  ],
+  "omitted_from_anonymous_metadata": [
+    "random seeds",
+    "case-construction formulas",
+    "arm group construction",
+    "matrix generation rules",
+    "transition perturbation rules",
+    "initial-belief generation rules",
+    "case-specific dynamics parameters",
+    "absolute local paths"
+  ],
+  "notes": [
+    "The anonymous release reports evaluation parameters and file locations without disclosing case-generation parameters.",
+    "The proposed full-tail index implementation is intentionally represented by paper-level pseudocode in the anonymous source package."
+  ]
+}

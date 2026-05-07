@@ -1,0 +1,41 @@
+{
+  "measurement": "single cold action-selection call at t=0 from initial public belief",
+  "policies": {
+    "ours_full_tail_all_arms": "OurHybridTailIndexPolicy(prefix_depth=1, tail_horizon=instance.horizon, candidate_count=None, tail_mode=commitment_envelope, resource_price=0).",
+    "rollout_depth4_mc1000": "RolloutMyopicMultiStatePolicy(rollout_horizon=4, rollout_samples=1000, candidate_actions=4).",
+    "simple_vfa": "SimpleVFAMultiStatePolicy with the tuned weights used in the main figures.",
+    "myopic": "MyopicMultiStatePolicy."
+  },
+  "fixed_N_vary_T": {
+    "N": 100,
+    "horizons": [
+      5,
+      10,
+      20,
+      40,
+      50,
+      80,
+      100,
+      150,
+      200
+    ]
+  },
+  "fixed_T_vary_N": {
+    "horizon": 100,
+    "N_values": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      80,
+      100
+    ]
+  },
+  "cases": [
+    "case1",
+    "case2",
+    "case3"
+  ],
+  "repeats": 1
+}

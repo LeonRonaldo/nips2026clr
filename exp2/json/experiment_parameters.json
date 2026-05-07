@@ -1,0 +1,92 @@
+{
+  "experiment_id": "exp2_runtime_full_tail_all_arm_index_four_policies",
+  "description": "One-step online decision runtime benchmark with four policies. Ours computes full-tail/all-arm index scores. Rollout baseline uses depth 4 and 1000 internal Monte Carlo samples.",
+  "measurement": {
+    "quantity": "single cold action-selection runtime at t=0",
+    "unit": "milliseconds",
+    "simulator_trajectory_run": false,
+    "matrix_details_included": false,
+    "summary_csv": "csv/paper_consistent_perstep_all_policies_summary.csv",
+    "raw_csv": "csv/paper_consistent_perstep_all_policies_raw.csv"
+  },
+  "common_model_parameters": {
+    "num_states": 8,
+    "budget": 1,
+    "discount": 0.99,
+    "seed": 123,
+    "cases": [
+      "case1",
+      "case2",
+      "case3"
+    ],
+    "instance_generator": "make_tuned_shared_instance from code/scripts/run_tuned_shared_mc_cases.py"
+  },
+  "runtime_sweeps": {
+    "runtime_vs_horizon": {
+      "sweep_id": "fixed_N_vary_T",
+      "fixed_num_arms": 100,
+      "horizons": [
+        5,
+        10,
+        20,
+        40,
+        50,
+        80,
+        100,
+        150,
+        200
+      ],
+      "plot": "plot/paper_consistent_all_policies_perstep_vs_T_N100.png"
+    },
+    "runtime_vs_N": {
+      "sweep_id": "fixed_T_vary_N",
+      "fixed_horizon": 100,
+      "num_arms": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        80,
+        100
+      ],
+      "plot": "plot/paper_consistent_all_policies_perstep_vs_N_T100.png"
+    },
+    "combined_plot": "plot/paper_consistent_all_policies_perstep_combined.png"
+  },
+  "policies": {
+    "ours_full_tail_all_arms": {
+      "class": "OurHybridTailIndexPolicy",
+      "prefix_depth": 1,
+      "tail_horizon": "instance.horizon",
+      "tail_mode": "commitment_envelope",
+      "resource_price": 0.0,
+      "candidate_count": null,
+      "cache_precision": 7,
+      "interpretation": "Scores every arm online and uses the full remaining finite horizon as the tail length."
+    },
+    "rollout_depth4_mc1000": {
+      "class": "RolloutMyopicMultiStatePolicy",
+      "rollout_horizon": 4,
+      "rollout_samples": 1000,
+      "candidate_actions": 4
+    },
+    "simple_vfa": {
+      "class": "SimpleVFAMultiStatePolicy",
+      "immediate_weight": 1.0,
+      "continuation_weight": 0.04,
+      "quality_weight": 0.02,
+      "information_weight": 0.0,
+      "drift_weight": 0.0
+    },
+    "myopic": {
+      "class": "MyopicMultiStatePolicy"
+    }
+  },
+  "code": {
+    "main_script": "code/scripts/benchmark_paper_consistent_perstep_all_policies.py",
+    "instance_generator_script": "code/scripts/run_tuned_shared_mc_cases.py",
+    "package_source": "code/src/canonical_rmab"
+  },
+  "reproduction_command": "cd exp2/code && MPLCONFIGDIR=/tmp/mplcache PYTHONPATH=src python3 scripts/benchmark_paper_consistent_perstep_all_policies.py --output-dir ../csv --figure-dir ../plot"
+}
